@@ -4,7 +4,7 @@
 
 # Şifreler ve giriş biletleri
 .env
-.eptr2-tgt
+.eptr2-tgt*
 
 # Python çöpleri
 __pycache__/
