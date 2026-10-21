@@ -1,0 +1,27 @@
+# Ham veri GitHub'a girmez (EPİAŞ veri paylaşım şartları belli değil)
+/data/
+*.parquet
+
+# Şifreler ve giriş biletleri
+.env
+.eptr2-tgt
+
+# Python çöpleri
+__pycache__/
+*.pyc
+.venv/
+
+# Deney kayıtları
+mlruns/
+
+# Not defteri çöpleri
+.ipynb_checkpoints/
+
+# Model dosyaları
+*.pkl
+*.joblib
+*.pt
+*.onnx
+*.bst
+*.lgb
+*.model
