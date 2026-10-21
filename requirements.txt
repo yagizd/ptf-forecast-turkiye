@@ -1,1 +1,2 @@
 eptr2[dataframe]==1.3.9
+pyarrow==26.0.0

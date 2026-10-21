@@ -25,3 +25,6 @@ mlruns/
 *.bst
 *.lgb
 *.model
+
+# Günlük backtest çıktısı ham EPİAŞ fiyatlarını içerir, GitHub'a girmesin
+reports/baselines_gunluk.csv
