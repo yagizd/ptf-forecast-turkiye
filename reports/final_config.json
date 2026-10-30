@@ -1,0 +1,62 @@
+{
+  "ozellikler": [
+    "price_lag_d1",
+    "price_lag_d2",
+    "price_lag_d7",
+    "price_d1_mean",
+    "hour",
+    "dayofweek",
+    "month",
+    "is_weekend",
+    "temp_mean_pd2",
+    "cloud_mean_pd2",
+    "precip_mean_pd2",
+    "wind_canakkale_pd2",
+    "solar_konya_pd2",
+    "is_holiday",
+    "is_arife",
+    "is_bridge",
+    "days_to_holiday",
+    "days_since_holiday"
+  ],
+  "gruplar": [
+    "H"
+  ],
+  "kapak_normalizasyonu_K": false,
+  "hedef_bicimi": "price (TL/MWh), ham",
+  "parametreler": {
+    "objective": "regression_l1",
+    "learning_rate": 0.05,
+    "n_estimators": 400,
+    "num_leaves": 31,
+    "min_child_samples": 50,
+    "subsample": 0.8,
+    "subsample_freq": 1,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+    "deterministic": true,
+    "force_row_wise": true,
+    "verbosity": -1
+  },
+  "parametreler_kaynagi": "varsayilan (optuna benimsenmedi veya calismadi)",
+  "seed": {
+    "lightgbm_random_state": 42,
+    "optuna_tpe": 42
+  },
+  "TRAIN_START": "2024-03-08 00:00:00+03:00",
+  "blok_gunu": 28,
+  "test_donemi": [
+    "2025-10-21",
+    "2026-10-20"
+  ],
+  "kod_sha256": {
+    "src/features/ptf_features.py": "aea9db5fb7d41007811a9d8c658bd91f48bd2bd2f96e80fbff762f05290eed46",
+    "src/features/ptf_features_v2.py": "d25c8ebb5e491368fe102a334d4537bfb624f9ac1d6e4d3f9af08469eaf986f8",
+    "src/models/lgbm_walkforward.py": "375384ccae4c1d7e0a627a34423e399325085c87d3bad7c52f63ed7735c869c0",
+    "src/models/validation_experiments.py": "d7f3e83006ab1ca9bdca678be2c91ff1332a94ff2061bcd9adaf3228d6134f3b",
+    "src/models/final_test_run.py": "083fa206eee8a18db56765fcd8415ece838291d179b02cb7a2696b2376064c4d",
+    "src/data/price_caps.py": "d32931d1a997405b1beccd50811cfbb24acd88c008d84a4ed7f62d865e1daff3",
+    "src/data/holidays_tr.py": "0af232c63a4c04f84cfbdf24683cb3a067ca509d36662d22b06e268223e004d9",
+    "src/models/baselines.py": "82214f0dea169338ed72b87d974299ec9aa51a48ed673ea03835d16625578ebf"
+  }
+}
