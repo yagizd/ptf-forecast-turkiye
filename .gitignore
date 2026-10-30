@@ -1,5 +1,9 @@
 # Ham veri GitHub'a girmez (EPİAŞ veri paylaşım şartları belli değil)
-/data/
+/data/*
+!/data/external/
+/data/external/*
+!/data/external/ptf_tavan_tablosu.csv
+!/data/external/turkiye_tatil_gunleri.csv
 *.parquet
 
 # Şifreler ve giriş biletleri
