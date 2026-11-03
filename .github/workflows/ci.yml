@@ -1,0 +1,41 @@
+# CI (sürekli doğrulama): her push ve pull request'te testleri otomatik çalıştırır.
+#
+# NOT 1: Gerçek model paketi ve gerçek veri repoda YOK (data/ git dışı). Gerçek veriyle yazılan testler burada ATLANIR (skip).
+#        Yani bu CI yalnızca KOD SAĞLIĞINI gösterir (kod çalışıyor mu, sentetik testler geçiyor mu); sonucun DOĞRULUĞUNU göstermez.
+# NOT 2: Aşağıdaki action sürümleri (v7) Proje şefi araştırmasından alındı; güven ORTA (Claude Code bunları doğrulayamadı).
+# NOT 3: Docker build adımı 7d sonrası eklenecek.
+# Gizli anahtar (secret) kullanılmaz; kişisel bilgi yok.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v7
+
+      - name: Python kur
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: pip güncelle
+        run: python -m pip install --upgrade pip
+
+      - name: Bağımlılıkları kur
+        run: pip install -r requirements.txt
+
+      - name: Testleri çalıştır
+        run: python -m unittest discover -s tests -t .
