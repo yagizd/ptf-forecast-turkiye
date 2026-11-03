@@ -3,3 +3,6 @@ pyarrow==26.0.0
 lightgbm==4.7.0
 scikit-learn==1.9.1
 optuna==5.0.0
+fastapi==0.162.0
+uvicorn==0.54.0
+httpx==0.28.1
