@@ -1,0 +1,24 @@
+# Docker derleme bağlamına (context) GİRMEYENLER. Model paketi ve tablo imaja girmez.
+.git
+.github
+.venv
+.venv-mlflow
+docs
+reports
+mlflow
+mlruns
+notebooks
+tests
+app
+docker
+**/__pycache__
+**/*.pyc
+
+# Sırlar ve giriş biletleri: ASLA imaja
+.env
+.env.*
+.eptr2-tgt*
+
+# Veri: hepsi dışarıda, yalnız küçük dış tablolar (tavan, tatil) kod için gerekli
+data/*
+!data/external
