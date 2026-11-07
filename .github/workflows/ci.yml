@@ -3,7 +3,7 @@
 # NOT 1: Gerçek model paketi ve gerçek veri repoda YOK (data/ git dışı). Gerçek veriyle yazılan testler burada ATLANIR (skip).
 #        Yani bu CI yalnızca KOD SAĞLIĞINI gösterir (kod çalışıyor mu, sentetik testler geçiyor mu); sonucun DOĞRULUĞUNU göstermez.
 # NOT 2: Aşağıdaki action sürümleri (v7) Proje şefi araştırmasından alındı; güven ORTA (Claude Code bunları doğrulayamadı).
-# NOT 3: Docker build adımı 7d sonrası eklenecek.
+# NOT 3: 'docker' işi imajı derler ve kapsayıcıda kütüphaneleri sınar; model ve veri yok, /predict burada denenmez.
 # Gizli anahtar (secret) kullanılmaz; kişisel bilgi yok.
 
 name: CI
@@ -39,3 +39,50 @@ jobs:
 
       - name: Testleri çalıştır
         run: python -m unittest discover -s tests -t .
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v7
+
+      - name: İmajı derle
+        run: docker build -f docker/Dockerfile -t ptf-servis .
+
+      - name: İmaj boyutunu yazdır
+        run: docker image ls ptf-servis
+
+      - name: İmajın içinde kütüphaneler çalışıyor mu
+        run: >
+          docker run --rm --entrypoint python ptf-servis
+          -c "import lightgbm, fastapi, pandas, pyarrow; print(lightgbm.__version__, pandas.__version__)"
+
+      - name: Ortam değişkeni YOKKEN konteyner AÇILMAMALI
+        run: |
+          set +e
+          out=$(timeout 60 docker run --rm --name ptf-noenv -e MODEL_DIR= -e DATA_PATH= ptf-servis 2>&1)
+          code=$?
+          set -e
+          echo "$out" | tail -n 20
+          echo "çıkış kodu: $code"
+          if [ "$code" -eq 124 ]; then echo "HATA: 60 sn içinde kapanmadı"; exit 1; fi
+          if [ "$code" -eq 0 ]; then echo "HATA: çıkış kodu 0 olmamalıydı"; exit 1; fi
+          echo "$out" | grep -q "MODEL_DIR ve DATA_PATH" || { echo "HATA: çıktıda 'MODEL_DIR ve DATA_PATH' yok"; exit 1; }
+          echo "TAMAM: ortam değişkeni yokken konteyner açılmadı (beklenen)"
+
+      - name: Zaman aşımında kalan konteyneri temizle
+        if: always()
+        run: docker rm -f ptf-noenv || true
+
+      # BİLGİ AMAÇLI deney: libgomp1 gerçekten gerekli mi? Sonuç ne olursa olsun job başarısız sayılmaz.
+      - name: libgomp1 deneyi (bilgi amaçlı)
+        continue-on-error: true
+        run: |
+          if docker run --rm python:3.13-slim sh -c "pip install -q lightgbm==4.7.0 && python -c 'import lightgbm; print(\"libgomp olmadan da import OK\")'"; then
+            echo "SONUÇ: libgomp1 OLMADAN lightgbm import edilebildi"
+          else
+            echo "SONUÇ: libgomp1 OLMADAN lightgbm import EDİLEMEDİ (libgomp1 gerekli görünüyor)"
+          fi
