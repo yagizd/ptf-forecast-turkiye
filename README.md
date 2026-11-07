@@ -108,7 +108,7 @@ To rebuild the hourly table you need your own account on the EPİAŞ transparenc
 - **Input timing is unverified.** Whether `_previous_day2` weather forecasts are ready at 10:00 the day before is unknown; the publication time of the load plan is unknown; whether the bridge-day flag is known at forecast time was not verified.
 - **Replay only**, no live pipeline. The service answers only for the 38 replay days.
 - **Raw EPİAŞ data and trained models are not in the repository.** Holiday bridge days come from news sites (medium confidence). The last price-cap decision found is dated 2 April 2026.
-- **Quantile outputs can cross** (raw q10 above q90 in 36 of 8,760 hours on T before conformal correction) [N7].
+- **Quantile outputs can cross.** The code uses the raw (unsorted) quantiles and applies no sorting fix. On T: q10 above q90 in 36 of 8,760 hours, q05 above q95 in 10, any ordering violation in 2,027 (23.1%) [N7]. In the stored final intervals no lower bound is above its upper bound, but the 90% interval does not fully contain the 80% interval in 1,399 of 8,760 hours (16.0%) for B3 on T (1,055 hours, 12.0%, on V).
 - **The repository has no licence file yet.**
 
 ## 7. Data and licence notes
