@@ -126,7 +126,7 @@ T was seen before, so what the dashboard shows is **not a clean final exam**. Th
 - **Replay only**, no live pipeline. The service answers only for the 38 replay days.
 - **Raw EPİAŞ data and trained models are not in the repository.** Holiday bridge days come from news sites (medium confidence). The last price-cap decision found is dated 2 April 2026.
 - **Quantile outputs can cross.** The code uses the raw (unsorted) quantiles and applies no sorting fix. On T: q10 above q90 in 36 of 8,760 hours, q05 above q95 in 10, any ordering violation in 2,027 (23.1%) [N7]. In the stored final intervals no lower bound is above its upper bound, but the 90% interval does not fully contain the 80% interval in 1,399 of 8,760 hours (16.0%) for B3 on T (1,055 hours, 12.0%, on V).
-- **The repository has no licence file yet.**
+- **Licence:** the code is released under the MIT licence (see the `LICENSE` file and the "License" section below).
 
 ## 7. Data and licence notes
 
@@ -160,6 +160,10 @@ requirements-lock.txt  `pip freeze` of the main environment (43 lines); the Dock
 - Market data: EPİAŞ transparency platform (via the `eptr2` Python package).
 - Weather forecasts: Open-Meteo.com (CC BY 4.0).
 - Methods: LightGBM; conformalized quantile regression (CQR); adaptive conformal inference (ACI).
+
+## License
+
+The code in this repository is released under the MIT licence; see the `LICENSE` file. The Open-Meteo CC BY 4.0 attribution in section 7 still applies to any weather data you obtain from Open-Meteo. EPİAŞ data is **not** covered by this licence: it is not in the repository and is not redistributed.
 
 ---
 
