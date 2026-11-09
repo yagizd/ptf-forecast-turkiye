@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=1 \
     MODEL_DIR=/models \
     DATA_PATH=/data/dataset_weather_guncel.parquet
 
-# LightGBM OpenMP kütüphanesini ister (libgomp1). Gerçekten gerekli mi BİLMİYORUZ; 7d Faz 2'de ayrı deneyle ölçülecek.
+# LightGBM OpenMP kütüphanesini ister (libgomp1). CI deneyi (7 Kasım 2026): libgomp1 OLMADAN lightgbm içe aktarılamadı (python:3.13-slim, lightgbm 4.7.0), yani GEREKLİ.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libgomp1 \
     && rm -rf /var/lib/apt/lists/*
