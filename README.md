@@ -90,6 +90,23 @@ curl "http://127.0.0.1:8000/predict?date=2026-10-01"
 
 To rebuild the hourly table you need your own account on the EPİAŞ transparency platform; credentials go in a local `.env` (see `.env.example`; the repository contains none). The full download pipeline was not re-run for this README.
 
+### 4.1 Dashboard (Streamlit)
+
+`app/streamlit_app.py` is a small dashboard that shows **stored results of the test period T only** (2025-10-21 to 2026-10-20). For a chosen day it shows the hourly actual price, the final point forecast, the B3 prediction interval (80% and 90%) and the D-1, D-7 and rule baselines. It also shows a summary for the chosen day and for the whole of T (MAE, B3 coverage, mean interval width). It is **not live**, it does **not produce forecasts**, and it does **not connect to EPİAŞ**: it only reads three stored files.
+
+Those three files are **not in this repository** (they are git-ignored): `data/processed/final_tahminleri.parquet`, `data/processed/oturum_T_final/aralik_T_tahminleri.parquet` and `reports/baselines_gunluk.csv`. If any of them is missing, the dashboard shows a clear error message listing the missing paths and stops.
+
+Run it in its own environment; the packages are listed in `requirements-app.txt` and the main environment is not touched:
+
+```bash
+python -m venv .venv-app
+# activate .venv-app, then:
+pip install -r requirements-app.txt
+python -m streamlit run app/streamlit_app.py
+```
+
+T was seen before, so what the dashboard shows is **not a clean final exam**. The dashboard has **not been deployed**: it is not on the internet.
+
 ## 5. Docker and CI status
 
 - **CI (GitHub Actions)** has two jobs, `test` and `docker` [N13].
@@ -97,7 +114,7 @@ To rebuild the hourly table you need your own account on the EPİAŞ transparenc
   - `docker` builds `docker/Dockerfile` on GitHub's Linux machine (run 42368669858). The image is 690 MB. Inside the image, `lightgbm` 4.7.0 and `pandas` 3.0.6 import correctly. With `MODEL_DIR` and `DATA_PATH` unset, the container refuses to start (exit code 3) with the message "MODEL_DIR ve DATA_PATH ortam degiskenleri gerekli" [N13].
   - An informational experiment showed that `lightgbm` could **not** be imported without the `libgomp1` system package (`libgomp.so.1: cannot open shared object file`), so `libgomp1` is needed (tested on `python:3.13-slim` with `lightgbm` 4.7.0) [N15].
 - **What was NOT tested:** `/predict` was **not** tried inside the image with a model and data (CI has neither). The image has **never been run on the development machine** (Docker is not installed there). The image was **not uploaded** anywhere (no registry). There is **no cloud deployment**.
-- **Streamlit app**: placeholder file only, no app yet.
+- **Streamlit dashboard**: a local dashboard of stored T-period results exists (section 4.1); it has not been deployed.
 
 ## 6. Limitations (please read)
 
@@ -128,12 +145,14 @@ tests/          unit tests (synthetic data) and tests that need the real data
 reports/        written reports for each experiment
 .github/        CI workflow (GitHub Actions)
 docker/         Dockerfile (built in CI, not run with a model)
-app/            Streamlit placeholder
+app/            Streamlit dashboard (stored T-period results only)
+requirements-app.txt   packages of the dashboard (separate environment, `.venv-app`)
+requirements-lock.txt  `pip freeze` of the main environment (43 lines); the Docker image does not use it (it installs `requirements.txt`)
 ```
 
 ## 9. Next steps
 
-1. A small Streamlit page and a cloud deployment.
+1. A cloud deployment (the Streamlit dashboard exists but has not been deployed).
 2. A live data pipeline (not planned in detail).
 
 ## 10. Sources and credits
